@@ -1,5 +1,6 @@
 ![CI](https://github.com/benlesh/rxjs-for-await/workflows/CI/badge.svg)
 [![npm version](https://badge.fury.io/js/rxjs-for-await.svg)](https://www.npmjs.com/package/rxjs-for-await)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 # rxjs-for-await
 A library for making RxJS support async-await for-await loops via AsyncIterables
