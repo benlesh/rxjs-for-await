@@ -25,10 +25,11 @@ jobs:
       - name: Setup Node.js for use with actions
         uses: actions/setup-node@v1.1.0
 
-      # Runs a single command using the runners shell
-      - name: action-yarn
-        uses: comchangs/action-yarn@v0.1-beta
+      - name: Install Yarn
+        run: npm i -g yarn
 
-      # Runs a set of commands using the runners shell
+      - name: Install Deps
+        run: yarn install
+
       - name: Run tests
         run: yarn test
