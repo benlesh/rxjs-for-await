@@ -1,3 +1,5 @@
+![CI](https://github.com/benlesh/rxjs-for-await/workflows/CI/badge.svg)
+
 # rxjs-for-await
 A library for making RxJS support async-await for-await loops via AsyncIterables
 
