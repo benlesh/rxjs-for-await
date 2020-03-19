@@ -88,7 +88,7 @@ async function example() {
 }
 ```
 
-Will wait for the very next value to arrive, then yeild it. Will continue to do so until the source observable completes or errors.
+Will wait for the very next value to arrive, then yield it. Will continue to do so until the source observable completes or errors.
 
 #### Pros
 - No chance of memory leaks
