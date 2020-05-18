@@ -5,7 +5,7 @@
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "es2015": "./dist/esm/index.js",
-  "types": "./dist/types/index.d.ts",
+  "types": "./dist/types/src/index.d.ts",
   "scripts": {
     "build": "rm -rf ./dist && yarn tsc -p tsconfig.esm.json && yarn tsc && yarn tsc -p tsconfig.types.json",
     "test": "jest",
