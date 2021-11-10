@@ -1,9 +1,14 @@
-import { of, throwError, interval, Subject } from 'rxjs';
-import { eachValueFrom, bufferedValuesFrom, latestValueFrom, nextValueFrom } from '..';
-import { take, finalize } from 'rxjs/operators';
+import { of, throwError, interval, Subject } from "rxjs";
+import {
+  eachValueFrom,
+  bufferedValuesFrom,
+  latestValueFrom,
+  nextValueFrom,
+} from "..";
+import { take, finalize } from "rxjs/operators";
 
-describe('eachValueFrom', () => {
-  test('should work for sync observables', async () => {
+describe("eachValueFrom", () => {
+  test("should work for sync observables", async () => {
     const source = of(1, 2, 3);
     const results: number[] = [];
     for await (const value of eachValueFrom(source)) {
@@ -12,8 +17,8 @@ describe('eachValueFrom', () => {
     expect(results).toEqual([1, 2, 3]);
   });
 
-  test('should throw if the observable errors', async () => {
-    const source = throwError(new Error('bad'));
+  test("should throw if the observable errors", async () => {
+    const source = throwError(new Error("bad"));
     let error: any;
     try {
       for await (const _ of eachValueFrom(source)) {
@@ -23,10 +28,10 @@ describe('eachValueFrom', () => {
       error = err;
     }
     expect(error).toBeInstanceOf(Error);
-    expect(error.message).toBe('bad');
+    expect(error.message).toBe("bad");
   });
 
-  test('should support async observables', async () => {
+  test("should support async observables", async () => {
     const source = interval(1).pipe(take(3));
     const results: number[] = [];
     for await (const value of eachValueFrom(source)) {
@@ -35,7 +40,7 @@ describe('eachValueFrom', () => {
     expect(results).toEqual([0, 1, 2]);
   });
 
-  test('should do something clever if the loop exits', async () => {
+  test("should do something clever if the loop exits", async () => {
     let finalized = false;
     const source = interval(1).pipe(
       take(10),
@@ -46,7 +51,7 @@ describe('eachValueFrom', () => {
       for await (const value of eachValueFrom(source)) {
         results.push(value);
         if (value === 1) {
-          throw new Error('bad');
+          throw new Error("bad");
         }
       }
     } catch (err) {
@@ -56,7 +61,7 @@ describe('eachValueFrom', () => {
     expect(finalized).toBe(true);
   });
 
-  test('a more advanced test', async () => {
+  test("a more advanced test", async () => {
     const results: number[] = [];
     const source = new Subject<number>();
     const advancer = createAdvancer();
@@ -105,8 +110,8 @@ describe('eachValueFrom', () => {
   });
 });
 
-describe('bufferedValuesFrom', () => {
-  test('should work for sync observables', async () => {
+describe("bufferedValuesFrom", () => {
+  test("should work for sync observables", async () => {
     const source = of(1, 2, 3);
     const results: number[][] = [];
     for await (const value of bufferedValuesFrom(source)) {
@@ -115,8 +120,8 @@ describe('bufferedValuesFrom', () => {
     expect(results).toEqual([[1, 2, 3]]);
   });
 
-  test('should throw if the observable errors', async () => {
-    const source = throwError(new Error('bad'));
+  test("should throw if the observable errors", async () => {
+    const source = throwError(new Error("bad"));
     let error: any;
     try {
       for await (const _ of bufferedValuesFrom(source)) {
@@ -126,10 +131,10 @@ describe('bufferedValuesFrom', () => {
       error = err;
     }
     expect(error).toBeInstanceOf(Error);
-    expect(error.message).toBe('bad');
+    expect(error.message).toBe("bad");
   });
 
-  test('should support async observables', async () => {
+  test("should support async observables", async () => {
     const source = interval(1).pipe(take(3));
     const results: number[][] = [];
     for await (const value of bufferedValuesFrom(source)) {
@@ -138,7 +143,7 @@ describe('bufferedValuesFrom', () => {
     expect(results).toEqual([[0], [1], [2]]);
   });
 
-  test('should do something clever if the loop exits', async () => {
+  test("should do something clever if the loop exits", async () => {
     let finalized = false;
     const source = interval(1).pipe(
       take(10),
@@ -149,7 +154,7 @@ describe('bufferedValuesFrom', () => {
       for await (const value of bufferedValuesFrom(source)) {
         results.push(value);
         if (value[0] === 1) {
-          throw new Error('bad');
+          throw new Error("bad");
         }
       }
     } catch (err) {
@@ -159,7 +164,7 @@ describe('bufferedValuesFrom', () => {
     expect(finalized).toBe(true);
   });
 
-  test('a more in-depth test', async () => {
+  test("a more in-depth test", async () => {
     const results: number[][] = [];
     const source = new Subject<number>();
     const advancer = createAdvancer();
@@ -183,19 +188,24 @@ describe('bufferedValuesFrom', () => {
     source.next(3);
     source.next(4);
     await advancer.next();
-    expect(results).toEqual([[0, 1, 2], [3, 4]]);
+    expect(results).toEqual([
+      [0, 1, 2],
+      [3, 4],
+    ]);
 
     // end the loop
     source.complete();
 
     await complete;
-    expect(results).toEqual([[0, 1, 2], [3, 4]]);
+    expect(results).toEqual([
+      [0, 1, 2],
+      [3, 4],
+    ]);
   });
 });
 
-
-describe('latestValueFrom', () => {
-  test('should work for sync observables', async () => {
+describe("latestValueFrom", () => {
+  test("should work for sync observables", async () => {
     const source = of(1, 2, 3);
     const results: number[] = [];
     for await (const value of latestValueFrom(source)) {
@@ -204,8 +214,8 @@ describe('latestValueFrom', () => {
     expect(results).toEqual([3]);
   });
 
-  test('should throw if the observable errors', async () => {
-    const source = throwError(new Error('bad'));
+  test("should throw if the observable errors", async () => {
+    const source = throwError(new Error("bad"));
     let error: any;
     try {
       for await (const _ of latestValueFrom(source)) {
@@ -215,10 +225,10 @@ describe('latestValueFrom', () => {
       error = err;
     }
     expect(error).toBeInstanceOf(Error);
-    expect(error.message).toBe('bad');
+    expect(error.message).toBe("bad");
   });
 
-  test('should support async observables', async () => {
+  test("should support async observables", async () => {
     const source = interval(1).pipe(take(3));
     const results: number[] = [];
     for await (const value of latestValueFrom(source)) {
@@ -227,7 +237,7 @@ describe('latestValueFrom', () => {
     expect(results).toEqual([0, 1, 2]);
   });
 
-  test('a more in-depth test', async () => {
+  test("a more in-depth test", async () => {
     const results: number[] = [];
     const source = new Subject<number>();
     const advancer = createAdvancer();
@@ -263,8 +273,7 @@ describe('latestValueFrom', () => {
     expect(results).toEqual([2, 4, 6]);
   });
 
-
-  test('a more in-depth with early exit', async () => {
+  test("a more in-depth with early exit", async () => {
     const results: number[] = [];
     const source = new Subject<number>();
     const advancer = createAdvancer();
@@ -307,9 +316,8 @@ describe('latestValueFrom', () => {
   });
 });
 
-
-describe('nextValueFrom', () => {
-  test('should work for sync observables', async () => {
+describe("nextValueFrom", () => {
+  test("should work for sync observables", async () => {
     const source = of(1, 2, 3);
     const results: number[] = [];
     for await (const value of nextValueFrom(source)) {
@@ -319,8 +327,8 @@ describe('nextValueFrom', () => {
     expect(results).toEqual([]);
   });
 
-  test('should throw if the observable errors', async () => {
-    const source = throwError(new Error('bad'));
+  test("should throw if the observable errors", async () => {
+    const source = throwError(new Error("bad"));
     let error: any;
     try {
       for await (const _ of nextValueFrom(source)) {
@@ -330,10 +338,10 @@ describe('nextValueFrom', () => {
       error = err;
     }
     expect(error).toBeInstanceOf(Error);
-    expect(error.message).toBe('bad');
+    expect(error.message).toBe("bad");
   });
 
-  test('should support async observables', async () => {
+  test("should support async observables", async () => {
     const source = interval(1).pipe(take(3));
     const results: number[] = [];
     for await (const value of nextValueFrom(source)) {
@@ -342,7 +350,7 @@ describe('nextValueFrom', () => {
     expect(results).toEqual([0, 1, 2]);
   });
 
-  test('a more in-depth test', async () => {
+  test("a more in-depth test", async () => {
     const results: number[] = [];
     const source = new Subject<number>();
     const advancer = createAdvancer();
@@ -378,8 +386,7 @@ describe('nextValueFrom', () => {
     expect(results).toEqual([0, 3, 5]);
   });
 
-
-  test('a more in-depth with early exit', async () => {
+  test("a more in-depth with early exit", async () => {
     const results: number[] = [];
     const source = new Subject<number>();
     const advancer = createAdvancer();
@@ -427,7 +434,7 @@ describe('nextValueFrom', () => {
  * one test to the next.
  */
 function createAdvancer() {
-  const factory = async function*() {
+  const factory = async function*(): AsyncGenerator<any, never, any> {
     let prev: any;
     while (true) {
       prev = yield prev;
@@ -440,7 +447,7 @@ function createAdvancer() {
 
   const _next = advancer.next.bind(advancer);
   advancer.next = async () => {
-    return _next().then(x => Promise.resolve(x));
+    return _next().then((x) => Promise.resolve(x));
   };
   return advancer;
 }

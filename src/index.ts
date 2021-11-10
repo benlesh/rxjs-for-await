@@ -1,5 +1,5 @@
-import { Observable } from 'rxjs';
-import { Deferred } from './util/deferred';
+import { Observable } from "rxjs";
+import { Deferred } from "./util/deferred";
 
 const RESOLVED = Promise.resolve();
 
@@ -30,7 +30,9 @@ const RESOLVED = Promise.resolve();
  *
  * @param source the Observable source to await values from
  */
-export async function* eachValueFrom<T>(source: Observable<T>): AsyncIterableIterator<T> {
+export async function* eachValueFrom<T>(
+  source: Observable<T>
+): AsyncIterableIterator<T> {
   const deferreds: Deferred<IteratorResult<T>>[] = [];
   const values: T[] = [];
   let hasError = false;
@@ -38,14 +40,14 @@ export async function* eachValueFrom<T>(source: Observable<T>): AsyncIterableIte
   let completed = false;
 
   const subs = source.subscribe({
-    next: value => {
+    next: (value) => {
       if (deferreds.length > 0) {
         deferreds.shift()!.resolve({ value, done: false });
       } else {
         values.push(value);
       }
     },
-    error: err => {
+    error: (err) => {
       hasError = true;
       error = err;
       while (deferreds.length > 0) {
@@ -119,7 +121,7 @@ export async function* bufferedValuesFrom<T>(source: Observable<T>) {
   let completed = false;
 
   const subs = source.subscribe({
-    next: value => {
+    next: (value) => {
       if (deferred) {
         deferred.resolve(
           RESOLVED.then(() => {
@@ -132,7 +134,7 @@ export async function* bufferedValuesFrom<T>(source: Observable<T>) {
       }
       buffer.push(value);
     },
-    error: err => {
+    error: (err) => {
       hasError = true;
       error = err;
       if (deferred) {
@@ -208,17 +210,19 @@ export async function* latestValueFrom<T>(source: Observable<T>) {
   let completed = false;
 
   const subs = source.subscribe({
-    next: value => {
+    next: (value) => {
       hasLatestValue = true;
       latestValue = value;
       if (deferred) {
-        deferred.resolve(RESOLVED.then(() => {
-          hasLatestValue = false;
-          return { value: latestValue, done: false };
-        }));
+        deferred.resolve(
+          RESOLVED.then(() => {
+            hasLatestValue = false;
+            return { value: latestValue, done: false };
+          })
+        );
       }
     },
-    error: err => {
+    error: (err) => {
       hasError = true;
       error = err;
       if (deferred) {
@@ -286,19 +290,21 @@ export async function* latestValueFrom<T>(source: Observable<T>) {
  *
  * @param source the Observable source to await values from
  */
-export async function* nextValueFrom<T>(source: Observable<T>) {
+export async function* nextValueFrom<T>(
+  source: Observable<T>
+): AsyncGenerator<T, void, void> {
   let deferred: Deferred<IteratorResult<T>> | undefined = undefined;
   let hasError = false;
   let error: any = null;
   let completed = false;
 
   const subs = source.subscribe({
-    next: value => {
+    next: (value) => {
       if (deferred) {
         deferred.resolve({ value, done: false });
       }
     },
-    error: err => {
+    error: (err) => {
       hasError = true;
       error = err;
       if (deferred) {
