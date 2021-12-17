@@ -13,6 +13,9 @@ This library exposes 4 different ways to consume an [RxJS](https://rxjs.dev) obs
 ### eachValueFrom (lossless)
 
 ```ts
+import { interval } from "rxjs";
+import { eachValueFrom } from "rxjs-for-await";
+
 async function example() {
 	const source$ = interval(100);
 
@@ -36,6 +39,9 @@ This strategy will yield every single value the observable source emits, one at 
 ### bufferedValuesFrom (lossless)
 
 ```ts
+import { interval } from "rxjs";
+import { bufferedValuesFrom } from "rxjs-for-await";
+
 async function example() {
 	const source$ = interval(10);
 
@@ -62,6 +68,9 @@ Keep an internal buffer of values emitted by the observable source, and yield th
 ### latestValueFrom (lossy)
 
 ```ts
+import { interval } from "rxjs";
+import { latestValueFrom } from "rxjs-for-await";
+
 async function example() {
 	const source$ = interval(100);
 
@@ -86,6 +95,9 @@ to do so until the source observable completes or errors.
 ### nextValueFrom (lossy)
 
 ```ts
+import { interval } from "rxjs";
+import { nextValueFrom } from "rxjs-for-await";
+
 async function example() {
 	const source$ = interval(100);
 
